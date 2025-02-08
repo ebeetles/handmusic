@@ -12,11 +12,31 @@
     <button id="stopChord">Stop Chord</button>
     <br>
     <label for="volume">Volume:</label>
-    <input type="range" id="volume" min="-20" max="0" value="-12" step="1">
+    <input type="range" id="volume" min="-50" max="-12" value="-12" step="1">
+    <br>
+    <label for="oscillationRate">Oscillation Rate (Hz):</label>
+    <input type="range" id="oscillationRate" min="0.1" max="10" value="0.1" step="0.1">
+    <br>
+    <label for="oscillationDepth">Oscillation Depth:</label>
+    <input type="range" id="oscillationDepth" min="0" max="1" value="0" step="0.1">
 
     <script>
         let synth;
-        let volume = new Tone.Volume(-12).toDestination();
+        let volume = new Tone.Volume().toDestination(); // Initialize volume without a default value
+        let lfo = new Tone.LFO().start(); // Initialize LFO without default values
+
+        // Set initial values from sliders
+        const volumeSlider = document.getElementById("volume");
+        const rateSlider = document.getElementById("oscillationRate");
+        const depthSlider = document.getElementById("oscillationDepth");
+
+        // Initialize LFO and volume with slider values
+        lfo.frequency.value = parseFloat(rateSlider.value); // Set initial LFO rate
+        lfo.min = -50; // Set initial LFO min value
+        lfo.max = -12; // Set initial LFO max value
+        lfo.connect(volume.volume); // Connect LFO to volume control
+
+        volume.volume.value = parseFloat(volumeSlider.value); // Set initial volume
 
         document.getElementById("playChord").addEventListener("click", async () => {
             await Tone.start(); // Ensure Tone.js is started
@@ -35,7 +55,17 @@
         });
 
         document.getElementById("volume").addEventListener("input", (event) => {
-            volume.volume.value = event.target.value;
+            volume.volume.value = parseFloat(event.target.value); // Update volume
+        });
+
+        document.getElementById("oscillationRate").addEventListener("input", (event) => {
+            lfo.frequency.value = parseFloat(event.target.value); // Update oscillation rate
+        });
+
+        document.getElementById("oscillationDepth").addEventListener("input", (event) => {
+            const depth = parseFloat(event.target.value);
+            lfo.min = -50 * depth; // Adjust oscillation depth (min value)
+            lfo.max = -12; // Keep max value constant
         });
     </script>
 </body>
