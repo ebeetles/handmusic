@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tone.js Chord Player</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.26/Tone.min.js"></script>
+</head>
+<body>
+    <h1>Play Chord (Fmaj7)</h1>
+    <button id="playChord">Play Chord</button>
+
+    <script>
+        document.getElementById("playChord").addEventListener("click", async () => {
+            await Tone.start(); // Ensure Tone.js is started
+            
+            const synth = new Tone.PolySynth(Tone.Synth).toDestination();
+            const now = Tone.now();
+            
+            synth.triggerAttackRelease(["F4", "A4", "C5", "E5"], "1n", now);
+        });
+    </script>
+</body>
+</html>
