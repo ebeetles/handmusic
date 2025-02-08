@@ -7,17 +7,35 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.26/Tone.min.js"></script>
 </head>
 <body>
-    <h1>Play Chord (Fmaj7)</h1>
+    <h1>Play and Stop Chord (Fmaj7)</h1>
     <button id="playChord">Play Chord</button>
+    <button id="stopChord">Stop Chord</button>
+    <br>
+    <label for="volume">Volume:</label>
+    <input type="range" id="volume" min="-20" max="0" value="-12" step="1">
 
     <script>
+        let synth;
+        let volume = new Tone.Volume(-12).toDestination();
+
         document.getElementById("playChord").addEventListener("click", async () => {
             await Tone.start(); // Ensure Tone.js is started
             
-            const synth = new Tone.PolySynth(Tone.Synth).toDestination();
-            const now = Tone.now();
+            if (!synth) {
+                synth = new Tone.PolySynth(Tone.Synth).connect(volume);
+            }
             
-            synth.triggerAttackRelease(["F4", "A4", "C5", "E5"], "1n", now);
+            synth.triggerAttack(["F4", "A4", "C5", "E5"]);
+        });
+
+        document.getElementById("stopChord").addEventListener("click", () => {
+            if (synth) {
+                synth.triggerRelease(["F4", "A4", "C5", "E5"]);
+            }
+        });
+
+        document.getElementById("volume").addEventListener("input", (event) => {
+            volume.volume.value = event.target.value;
         });
     </script>
 </body>
