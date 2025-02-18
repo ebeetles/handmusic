@@ -357,6 +357,7 @@ function HandMusic() {
             <option value="mixolydian">Mixolydian</option>
             <option value="aeolian">Aeolian</option>
             <option value="locrian">Locrian</option>
+            <option value="blues">Blues</option>
           </select>
           <select onChange={(e) => setInstrument(e.target.value)}>
             <option value="sine">Sine</option>
